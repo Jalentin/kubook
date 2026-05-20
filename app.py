@@ -3,9 +3,9 @@ import re
 import pandas as pd
 import io
 
-st.set_page_config(page_title="Extracteur Dofusbook", page_icon="⚙️")
+st.set_page_config(page_title="Kubook - Extracteur Dofusbook", page_icon="⚙️")
 
-st.title("⚙️ Extracteur d'Items Dofusbook")
+st.title("⚙️ Kubook - Extracteur d'Items Dofusbook")
 st.markdown("""
 Cet outil te permet d'extraire rapidement les informations (Nom, Type, Niveau) de ton atelier Dofusbook sous forme de tableau ou de fichier CSV.
 
@@ -14,6 +14,8 @@ Cet outil te permet d'extraire rapidement les informations (Nom, Type, Niveau) d
 2. Sélectionne tout le texte de la page (Ctrl+A ou Cmd+A) ou juste la liste des items.
 3. Copie (Ctrl+C ou Cmd+C).
 4. Colle le texte dans la boîte ci-dessous.
+
+📺 **Soutiens le projet et rejoins la communauté en t'abonnant à [ma chaîne YouTube Kub-df](https://www.youtube.com/@Kub-df/) !**
 """)
 
 raw_text = st.text_area("Colle ton texte Dofusbook ici :", height=200)
