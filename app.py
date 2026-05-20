@@ -2,6 +2,26 @@ import streamlit as st
 import re
 import pandas as pd
 import io
+import json
+import os
+
+COUNTER_FILE = "click_counter.json"
+
+def get_click_count():
+    if os.path.exists(COUNTER_FILE):
+        with open(COUNTER_FILE, "r") as f:
+            try:
+                data = json.load(f)
+                return data.get("clicks", 0)
+            except (json.JSONDecodeError, ValueError):
+                return 0
+    return 0
+
+def increment_click_count():
+    count = get_click_count() + 1
+    with open(COUNTER_FILE, "w") as f:
+        json.dump({"clicks": count}, f)
+    return count
 
 st.set_page_config(page_title="Kub Tools - Extracteur Dofusbook", page_icon="⚙️")
 
@@ -21,6 +41,7 @@ Cet outil te permet d'extraire rapidement les informations (Nom, Type, Niveau) d
 raw_text = st.text_area("Colle ton texte Dofusbook ici :", height=200)
 
 if st.button("Extraire les items"):
+    increment_click_count()
     if raw_text.strip():
         lines = raw_text.split('\n')
         items = []
@@ -70,3 +91,6 @@ if st.button("Extraire les items"):
             st.warning("Aucun item n'a pu être trouvé. Assure-toi d'avoir bien copié les données de ton atelier Dofusbook.")
     else:
         st.error("Le champ de texte est vide.")
+
+st.sidebar.markdown("### 📊 Statistiques")
+st.sidebar.text(f"Outil utilisé {get_click_count()} fois")
