@@ -3,9 +3,9 @@ import re
 import pandas as pd
 import io
 
-st.set_page_config(page_title="Kubook - Extracteur Dofusbook", page_icon="⚙️")
+st.set_page_config(page_title="Kub Tools - Extracteur Dofusbook", page_icon="⚙️")
 
-st.title("⚙️ Kubook - Extracteur d'Items Dofusbook")
+st.title("⚙️ Kub Tools - Extracteur d'Items Dofusbook")
 st.markdown("""
 Cet outil te permet d'extraire rapidement les informations (Nom, Type, Niveau) de ton atelier Dofusbook sous forme de tableau ou de fichier CSV.
 
