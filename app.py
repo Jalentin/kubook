@@ -23,7 +23,11 @@ def increment_click_count():
         json.dump({"clicks": count}, f)
     return count
 
-st.set_page_config(page_title="Kub Tools - Extracteur Dofusbook", page_icon="⚙️")
+st.set_page_config(
+    page_title="Kub Tools - Extracteur Dofusbook", 
+    page_icon="⚙️",
+    initial_sidebar_state="collapsed"
+)
 
 st.title("⚙️ Kub Tools - Extracteur d'Items Dofusbook")
 st.markdown("""
