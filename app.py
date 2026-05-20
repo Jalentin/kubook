@@ -37,6 +37,11 @@ if st.button("Extraire les items"):
                     item_type = match.group(1).strip()
                     level = match.group(2).strip()
                     
+                    # Regroupement de toutes les armes
+                    armes_types = ["Hache", "Faux", "Pioche", "Marteau", "Pelle", "Dagues", "Arc", "Épée", "Bâton", "Baguette", "Lance"]
+                    if item_type in armes_types:
+                        item_type = "Arme"
+                    
                     items.append({
                         "Nom": name,
                         "Type": item_type,
