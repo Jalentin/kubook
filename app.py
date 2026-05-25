@@ -49,38 +49,46 @@ if st.button("Extraire les items"):
     if raw_text.strip():
         lines = raw_text.split('\n')
         items = []
+        debug_logs = []
+        debug_logs.append(f"Nombre de lignes analysées : {len(lines)}")
         
         for i, line in enumerate(lines):
             line = line.strip()
             
             # On repere le "x" qui precede la quantite
-            if line == 'x' and i > 0 and i < len(lines) - 2:
-                name = lines[i-1].strip()
-                quantity_raw = lines[i+1].strip()
-                type_level_raw = lines[i+2].strip()
-                
-                try:
-                    quantity = int(quantity_raw)
-                except ValueError:
-                    quantity = 1
-                
-                # On extrait le type et le niveau
-                match = re.search(r'(.+?) - Niveau (\d+)', type_level_raw)
-                if match:
-                    item_type = match.group(1).strip()
-                    level = match.group(2).strip()
+            if line == 'x':
+                if i > 0 and i < len(lines) - 2:
+                    name = lines[i-1].strip()
+                    quantity_raw = lines[i+1].strip()
+                    type_level_raw = lines[i+2].strip()
                     
-                    # Regroupement de toutes les armes
-                    armes_types = ["Hache", "Faux", "Pioche", "Marteau", "Pelle", "Dagues", "Arc", "Épée", "Bâton", "Baguette", "Lance"]
-                    if item_type in armes_types:
-                        item_type = "Arme"
+                    try:
+                        quantity = int(quantity_raw)
+                    except ValueError:
+                        quantity = 1
+                        debug_logs.append(f"⚠️ Ligne {i}: Quantité invalide '{quantity_raw}' pour l'item '{name}'. On suppose 1 par défaut.")
                     
-                    items.append({
-                        "Nom": name,
-                        "Nombre": quantity,
-                        "Type": item_type,
-                        "Niveau": int(level)
-                    })
+                    # On extrait le type et le niveau
+                    match = re.search(r'(.+?) - Niveau (\d+)', type_level_raw)
+                    if match:
+                        item_type = match.group(1).strip()
+                        level = match.group(2).strip()
+                        
+                        # Regroupement de toutes les armes
+                        armes_types = ["Hache", "Faux", "Pioche", "Marteau", "Pelle", "Dagues", "Arc", "Épée", "Bâton", "Baguette", "Lance"]
+                        if item_type in armes_types:
+                            item_type = "Arme"
+                        
+                        items.append({
+                            "Nom": name,
+                            "Nombre": quantity,
+                            "Type": item_type,
+                            "Niveau": int(level)
+                        })
+                    else:
+                        debug_logs.append(f"❌ Ligne {i}: Le format Type - Niveau attendu n'a pas été trouvé pour '{name}'. Texte analysé : '{type_level_raw}'")
+                else:
+                    debug_logs.append(f"❌ Ligne {i}: Un 'x' a été trouvé mais il manque des informations avant ou après pour constituer un item complet.")
         
         if items:
             st.success(f"{len(items)} items extraits avec succès !")
@@ -98,8 +106,14 @@ if st.button("Extraire les items"):
                 file_name='dofusbook_items.csv',
                 mime='text/csv',
             )
+            
+            if len(debug_logs) > 1:
+                with st.expander("🛠️ Voir le rapport d'analyse (il y a eu quelques anomalies)"):
+                    st.text("\n".join(debug_logs))
         else:
-            st.warning("Aucun item n'a pu être trouvé. Assure-toi d'avoir bien copié les données de ton atelier Dofusbook.")
+            st.error("Aucun item n'a pu être trouvé. Assure-toi d'avoir bien copié les données de ton atelier Dofusbook.")
+            st.warning("Pour m'aider à comprendre le problème, copie le rapport ci-dessous et envoie-le moi :")
+            st.code("\n".join(debug_logs), language="text")
     else:
         st.error("Le champ de texte est vide.")
 
