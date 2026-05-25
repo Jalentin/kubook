@@ -56,7 +56,13 @@ if st.button("Extraire les items"):
             # On repere le "x" qui precede la quantite
             if line == 'x' and i > 0 and i < len(lines) - 2:
                 name = lines[i-1].strip()
+                quantity_raw = lines[i+1].strip()
                 type_level_raw = lines[i+2].strip()
+                
+                try:
+                    quantity = int(quantity_raw)
+                except ValueError:
+                    quantity = 1
                 
                 # On extrait le type et le niveau
                 match = re.search(r'(.+?) - Niveau (\d+)', type_level_raw)
@@ -71,6 +77,7 @@ if st.button("Extraire les items"):
                     
                     items.append({
                         "Nom": name,
+                        "Nombre": quantity,
                         "Type": item_type,
                         "Niveau": int(level)
                     })
